@@ -33,7 +33,18 @@ export interface UnityVersionInfo {
     isAlpha: boolean;
 };
 
+/**
+ * The result of an attempt to determine a project's last used Unity editor version.
+ */
 export interface UnityVersionInfoResult {
+
+    /**
+     * Information found about the project's last used Unity editor version.
+     */
     info?: UnityVersionInfo;
+
+    /**
+     * Error information in case the version information could not be retrieved.
+     */
     error?: string;
 }

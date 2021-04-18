@@ -1,7 +1,10 @@
-import { UnityVersionInfo, UnityVersionInfoResult } from './models';
+import { UnityVersionInfoResult } from './models';
 import path = require('path');
 import fs = require('fs');
 
+/**
+ * A collection of static functions to determine the last used Unity version of a project
+ */
 export class UnityVersionTools {
 
     private static readonly projectSettingsFolder = 'ProjectSettings';
