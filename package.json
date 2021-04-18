@@ -1,0 +1,47 @@
+{
+    "name": "@dinomite-studios/unity-azure-pipelines-tasks-lib",
+    "version": "1.0.0",
+    "description": "A library containing common implementations for pipeline tasks available in the Unity Tools for Azure DevOps extension.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "test": "mocha -r ts-node/register test/**/*.spec.ts",
+        "publish": "npm publish --access public",
+        "build-and-publish": "npm run build && npm run publish"
+    },
+    "keywords": [
+        "unity",
+        "devops",
+        "utilities"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Dinomite-Studios/unity-azure-pipelines-tasks-lib"
+    },
+    "bugs": {
+        "url": "https://github.com/Dinomite-Studios/unity-azure-pipelines-tasks-lib/issues"
+    },
+    "homepage": "https://www.unitydevops.com",
+    "author": "Dinomite Studios",
+    "license": "MIT",
+    "dependencies": {
+        "azure-pipelines-task-lib": "^3.1.0",
+        "fs-extra": "^8.1.0",
+        "sanitize-filename": "^1.6.3",
+        "tail": "^2.2.2"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.2.14",
+        "@types/mocha": "^8.2.0",
+        "@types/node": "^14.14.19",
+        "@types/fs-extra": "^8.0.0",
+        "@types/sanitize-filename": "^1.6.3",
+        "@types/tail": "^2.0.0",
+        "@types/q": "^1.5.4",
+        "chai": "^4.2.0",
+        "mocha": "^8.2.1",
+        "ts-node": "^9.1.1",
+        "typescript": "^3.9.7"
+    }
+}
