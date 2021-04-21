@@ -26,9 +26,9 @@ export class UnityLogStreamer {
         });
 
         let exitCode = -1;
-        logTail.on("error", function (error) { console.log('ERROR: ', error); });
-        logTail.on("line", function (data) { 
-            console.log(data); 
+        logTail.on("error", function (error) { console.error('ERROR: ', error); });
+        logTail.on("line", function (data) {
+            console.log(data);
             if (data.includes('Crash!!!')) {
                 exitCode = -1;
             }
@@ -65,11 +65,24 @@ export class UnityLogStreamer {
                 exitCode = 0;
             }
 
-            if (exitCode === 0) {
+            // WORKAROUND for Unity testing
+            // Exit code 2 means the Unity process did run successfully but at least one
+            // test has failed. In this case we want to handle the exit code as a non-error code.
+            if (e instanceof Error && e.message.includes('exit code 2')) {
+                exitCode = 2;
+            }
+
+            if (exitCode === 0 || exitCode === 2) {
                 return exitCode;
             }
 
-            throw e;
+            if (e instanceof Error) {
+                console.error(e.message);
+            } else {
+                console.error(e);
+            }
+
+            return -1;
         }
     }
 

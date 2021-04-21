@@ -7,8 +7,8 @@ import fs = require('fs');
  */
 export class UnityVersionTools {
 
-    private static readonly projectSettingsFolder = 'ProjectSettings';
-    private static readonly projectVersionFile = 'ProjectVersion.txt';
+    private static readonly unityProjectSettingsFolder = 'ProjectSettings';
+    private static readonly unityProjectEditorVersionFile = 'ProjectVersion.txt';
 
     /**
      * Gets a Unity project's Unity editor version by looking up the project version file in the project directory.
@@ -17,7 +17,7 @@ export class UnityVersionTools {
      */
     public static determineProjectVersionFromFile(projectRootPath: string): UnityVersionInfoResult {
         try {
-            const projectVersionFilePath = path.join(projectRootPath, UnityVersionTools.projectSettingsFolder, UnityVersionTools.projectVersionFile);
+            const projectVersionFilePath = path.join(projectRootPath, UnityVersionTools.unityProjectSettingsFolder, UnityVersionTools.unityProjectEditorVersionFile);
             const projectVersionFileContent = fs.readFileSync(projectVersionFilePath, { encoding: 'utf8' });
             const projectVersionResult = this.determineProjectVersionFromContent(projectVersionFileContent);
 
@@ -25,6 +25,9 @@ export class UnityVersionTools {
         } catch (e) {
             let errorMessage = 'Unknown error while determining Unity project version.'
 
+            // If we have an error instance the actual error message
+            // is probably more helpful. Since we are targeting developers/DevOps engineers
+            // it's okay to use the error message instead of a friendly text.
             if (e instanceof Error) {
                 errorMessage = e.message;
             }

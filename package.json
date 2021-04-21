@@ -36,7 +36,6 @@
         "@types/mocha": "^8.2.0",
         "@types/node": "^14.14.19",
         "@types/fs-extra": "^8.0.0",
-        "@types/sanitize-filename": "^1.6.3",
         "@types/tail": "^2.0.0",
         "@types/q": "^1.5.4",
         "chai": "^4.2.0",
