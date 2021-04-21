@@ -1,5 +1,6 @@
 import tail from 'tail';
 import fs = require('fs-extra');
+import { Utilities } from './utilities';
 
 /**
  * Watches the unity log output and streams it back to the console.
@@ -26,8 +27,12 @@ export class UnityLogStreamer {
         });
 
         let exitCode = -1;
-        logTail.on("error", function (error) { console.error('ERROR: ', error); });
-        logTail.on("line", function (data) {
+
+        logTail.on("error", (error) => {
+            console.error('ERROR: ', error);
+        });
+
+        logTail.on("line", (data) => {
             console.log(data);
             if (data.includes('Crash!!!')) {
                 exitCode = -1;
@@ -43,37 +48,35 @@ export class UnityLogStreamer {
             }
 
             while (size > UnityLogStreamer.getTailPos(logTail) || UnityLogStreamer.getTailQueueLength(logTail) > 0) {
-                await UnityLogStreamer.sleep(2089);
+                await Utilities.sleep(2089);
             }
 
             logTail.unwatch();
 
             return exitCode;
         } catch (e) {
-            if (logTail != null) {
+            if (logTail) {
                 logTail.unwatch();
             }
 
-            // WORKAROUND for license activation
-            // The unity exe might return the error code 3221225477 and throw an
-            // error because it can't write the license file on the agent, due to
-            // missing access rights. Nontheless the Unity process has finished
-            // its operation at this point and we can ignore this specific error,
-            // since the license is going to get released anyways after the pipeline
-            // has finished.
-            if (e instanceof Error && e.message.includes('exit code 3221225477')) {
-                exitCode = 0;
-            }
+            if (e instanceof Error) {
+                // WORKAROUND for license activation
+                // The unity exe might return the error code 3221225477 and throw an
+                // error because it can't write the license file on the agent, due to
+                // missing access rights. Nontheless the Unity process has finished
+                // its operation at this point and we can ignore this specific error,
+                // since the license is going to get released anyways after the pipeline
+                // has finished.
+                if (e.message.includes('exit code 3221225477')) {
+                    exitCode = 0;
+                }
 
-            // WORKAROUND for Unity testing
-            // Exit code 2 means the Unity process did run successfully but at least one
-            // test has failed. In this case we want to handle the exit code as a non-error code.
-            if (e instanceof Error && e.message.includes('exit code 2')) {
-                exitCode = 2;
-            }
-
-            if (exitCode === 0 || exitCode === 2) {
-                return exitCode;
+                // WORKAROUND for Unity testing
+                // Exit code 2 means the Unity process did run successfully but at least one
+                // test has failed. In this case we want to handle the exit code as a non-error code.
+                if (e.message.includes('exit code 2')) {
+                    exitCode = 2;
+                }
             }
 
             if (e instanceof Error) {
@@ -82,7 +85,7 @@ export class UnityLogStreamer {
                 console.error(e);
             }
 
-            return -1;
+            return exitCode;
         }
     }
 
@@ -91,14 +94,6 @@ export class UnityLogStreamer {
      */
     public static printClose(): void {
         console.log("=============================== UNITY LOG END ================================");
-    }
-
-    /**
-     * Halts execution for a given time.
-     * @param ms Sleep duration in milliseconds.
-     */
-    public static sleep(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     private static getTailPos(t: any): number {

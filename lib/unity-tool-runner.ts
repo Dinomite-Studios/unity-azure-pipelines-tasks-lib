@@ -1,6 +1,7 @@
 import fs = require('fs-extra');
 import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
 import { UnityLogStreamer } from './unity-log-streamer';
+import { Utilities } from './utilities';
 
 /**
  * The unity tool runner wraps the azure pipelines task lib tool runner
@@ -18,7 +19,7 @@ export class UnityToolRunner {
     public static async run(tool: ToolRunner, logFilePath: string): Promise<number> {
         const execResult = tool.exec();
         while (execResult.isPending() && !fs.existsSync(logFilePath)) {
-            await UnityLogStreamer.sleep(1000);
+            await Utilities.sleep(1000);
         }
 
         UnityLogStreamer.printOpen();
