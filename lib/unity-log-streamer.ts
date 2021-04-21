@@ -21,9 +21,14 @@ export class UnityLogStreamer {
      */
     public static async stream(logFilePath: string, execResult: Q.Promise<number>): Promise<number> {
         const logTail = new tail.Tail(logFilePath, {
-            fromBeginning: true, follow: true,
-            logger: console, useWatchFile: true,
-            fsWatchOptions: { interval: 1009 }
+            fromBeginning: true,
+            follow: true,
+            logger: console,
+            useWatchFile: true,
+            flushAtEOF: true,
+            fsWatchOptions: {
+                interval: 1009
+            }
         });
 
         let exitCode = -1;
