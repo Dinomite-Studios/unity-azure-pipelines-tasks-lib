@@ -1,6 +1,4 @@
 import tail from 'tail';
-import fs = require('fs-extra');
-import { Utilities } from './utilities';
 
 /**
  * Watches the unity log output and streams it back to the console.
@@ -46,18 +44,7 @@ export class UnityLogStreamer {
 
         try {
             exitCode = await execResult;
-
-            let size = 0;
-            if (fs.existsSync(logFilePath)) {
-                size = fs.statSync(logFilePath).size;
-            }
-
-            while (size > UnityLogStreamer.getTailPos(logTail) || UnityLogStreamer.getTailQueueLength(logTail) > 0) {
-                await Utilities.sleep(2089);
-            }
-
             logTail.unwatch();
-
             return exitCode;
         } catch (e) {
             if (logTail) {
@@ -99,13 +86,5 @@ export class UnityLogStreamer {
      */
     public static printClose(): void {
         console.log("=============================== UNITY LOG END ================================");
-    }
-
-    private static getTailPos(t: any): number {
-        return t.pos;
-    }
-
-    private static getTailQueueLength(t: any): number {
-        return t.queue.length;
     }
 }
