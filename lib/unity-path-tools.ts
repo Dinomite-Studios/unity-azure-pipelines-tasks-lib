@@ -1,3 +1,6 @@
+// Copyright (c) Dinomite Studios. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 import { Utilities } from './utilities';
 import { OS, UnityVersionInfo } from './models';
 import path = require('path');
