@@ -1,3 +1,6 @@
+// Copyright (c) Dinomite Studios. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 import fs = require('fs-extra');
 import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
 import { UnityLogStreamer } from './unity-log-streamer';
