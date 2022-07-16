@@ -13,4 +13,4 @@ A library containing common implementations for pipeline tasks available in the 
 
 ## Contributions
 
-Found and fixed a bug or improved on something? Contributions are welcome! Please target your pull request against the `development` branch or file an issue on [GitHub](https://github.com/Dinomite-Studios/unity-azure-pipelines-tasks-lib/issues) so someone else can try and implement or fix it. You are also welcome to join our [Discord](https://discord.gg/RpHSpxkEP6) for help and discussions.
+Found and fixed a bug or improved on something? Contributions are welcome! Please target your pull request against the `main` branch or file an issue on [GitHub](https://github.com/Dinomite-Studios/unity-azure-pipelines-tasks-lib/issues) so someone else can try and implement or fix it. You are also welcome to join our [Discord](https://discord.gg/RpHSpxkEP6) for help and discussions.
