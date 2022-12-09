@@ -9,7 +9,7 @@ A library containing common implementations for pipeline tasks available in the 
 
 | Branch      | Description                                                                                                                               | Status                                                                                                                                                         |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| main        | The main branch is built and deployed to [www.npmjs.com](https://www.npmjs.com/package/@dinomite-studios/unity-azure-pipelines-tasks-lib). Please target PRs against this branch. | ![Build Status](https://dev.azure.com/dinomite/Unity%20Tools%20for%20Azure%20DevOps/_apis/build/status/unity-azure-pipelines-tasks-lib?branchName=main)        |
+| main        | The main branch is built and deployed to [www.npmjs.com](https://www.npmjs.com/package/@dinomite-studios/unity-azure-pipelines-tasks-lib). Please target PRs against this branch. | ![Build Status](https://github.com/Dinomite-Studios/unity-azure-pipelines-tasks-lib/actions/workflows/ci.yml/badge.svg)        |
 
 ## Contributions
 
