@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, development ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 10
+
+      - name: Run npm install and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Run tests
+        run: npm run test
+
+  publish:
+    needs: ci
+
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/main' && needs.ci.result == 'success'
+
+    steps:
+      - name: Install NPM login utility
+        run: npm install -g npm-cli-login
+
+      - name: Login to public NPM registry
+        run: npm-cli-login -u ${{ secrets.NPM_USERNAME }} -p ${{ secrets.NPM_PASSWORD }} -e ${{ secrets.NPM_EMAIL }}
+
+      - name: Publish
+        run: npm run publish
