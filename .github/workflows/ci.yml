@@ -24,20 +24,3 @@ jobs:
 
       - name: Run tests
         run: npm run test
-
-  publish:
-    needs: ci
-
-    runs-on: ubuntu-latest
-
-    if: github.ref == 'refs/heads/main' && needs.ci.result == 'success'
-
-    steps:
-      - name: Install NPM login utility
-        run: npm install -g npm-cli-login
-
-      - name: Login to public NPM registry
-        run: npm-cli-login -u ${{ secrets.NPM_USERNAME }} -p ${{ secrets.NPM_PASSWORD }} -e ${{ secrets.NPM_EMAIL }}
-
-      - name: Publish
-        run: npm run publish
