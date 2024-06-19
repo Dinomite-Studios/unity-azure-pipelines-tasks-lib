@@ -1,4 +1,4 @@
-// Copyright (c) Dinomite Studios. All rights reserved.
+// Copyright (c) Dinomite. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 import { Utilities } from './utilities';
@@ -6,6 +6,21 @@ import { OS, UnityVersionInfo } from './models';
 import path = require('path');
 
 export class UnityPathTools {
+
+    /**
+     * Gets the path to the Unity Hub executable dependong on the build agent's operating system.
+     * @returns 
+     */
+    public static getUnityHubPath(): string {
+        const os = Utilities.getOS();
+
+        switch (os) {
+            case OS.Windows: return path.join('C:', 'Program Files', 'Unity Hub', 'Unity Hub.exe');
+            case OS.MacOS: return path.join('/', 'Applications', 'Unity Hub.app', 'Contents', 'MacOS', 'Unity Hub');
+            case OS.Linux: return path.join('~', 'Unity Hub', 'Unity Hub');
+            default: throw new Error('Operating system not supported!');
+        }
+    }
 
     /**
      * Gets the path to the Unity editors folder depending on the process platform.

@@ -1,4 +1,4 @@
-// Copyright (c) Dinomite Studios. All rights reserved.
+// Copyright (c) Dinomite. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 import tail from 'tail';
