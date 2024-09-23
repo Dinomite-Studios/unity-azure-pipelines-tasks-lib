@@ -1,7 +1,7 @@
 // Copyright (c) Dinomite. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-import * as fs from 'node:fs';
+import fs from 'fs';
 import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
 import { UnityLogStreamer } from './unity-log-streamer';
 import { Utilities } from './utilities';

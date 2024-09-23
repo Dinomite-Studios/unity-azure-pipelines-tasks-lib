@@ -3,7 +3,7 @@
 
 import { UnityVersionInfoResult } from './models';
 import path = require('path');
-import * as fs from 'node:fs';
+import fs from 'fs';
 
 /**
  * A collection of static functions to determine the last used Unity version of a project
