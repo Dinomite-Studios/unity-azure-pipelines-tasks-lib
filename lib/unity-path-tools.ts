@@ -17,7 +17,7 @@ export class UnityPathTools {
         switch (os) {
             case OS.Windows: return path.join('C:', 'Program Files', 'Unity Hub', 'Unity Hub.exe');
             case OS.MacOS: return path.join('/', 'Applications', 'Unity Hub.app', 'Contents', 'MacOS', 'Unity Hub');
-            case OS.Linux: return path.join('~', 'Unity Hub', 'Unity Hub');
+            case OS.Linux: return path.join('~', 'Applications', 'Unity Hub.AppImage');
             default: throw new Error('Operating system not supported!');
         }
     }
