@@ -14,7 +14,7 @@ describe('UnityVersionTools',
             expect(error);
         });
 
-        it('Test ProjectVersion.txt should return 2020.2.0f1 (3721df5a8b28) stable', () => {
+        it('ProjectVersion.txt should return 2020.2.0f1 (3721df5a8b28) stable', () => {
             const { info, error } = UnityVersionTools.determineProjectVersionFromFile(__dirname);
             const expectedResult: UnityVersionInfo = {
                 version: '2020.2.0f1',
