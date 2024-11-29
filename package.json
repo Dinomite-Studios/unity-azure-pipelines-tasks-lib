@@ -1,6 +1,6 @@
 {
     "name": "@dinomite-studios/unity-azure-pipelines-tasks-lib",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "A library containing common implementations for pipeline tasks available in the Unity Tools for Azure DevOps extension.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -26,14 +26,14 @@
     "author": "Dinomite",
     "license": "MIT",
     "dependencies": {
-        "azure-pipelines-task-lib": "^4.17.2",
+        "azure-pipelines-task-lib": "^4.17.3",
         "sanitize-filename": "^1.6.3",
         "tail": "^2.2.6"
     },
     "devDependencies": {
         "@types/chai": "^4.3.0",
         "@types/mocha": "^10.0.8",
-        "@types/node": "^22.5.5",
+        "@types/node": "^22.10.1",
         "@types/tail": "^2.2.3",
         "@types/q": "^1.5.8",
         "chai": "^4.5.0",

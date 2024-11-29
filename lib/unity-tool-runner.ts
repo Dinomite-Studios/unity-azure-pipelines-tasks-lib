@@ -20,15 +20,48 @@ export class UnityToolRunner {
      * @returns Unity exit code.
      */
     public static async run(tool: ToolRunner, logFilePath: string): Promise<number> {
-        const execResult = tool.exec();
-        while (execResult.isPending() && !fs.existsSync(logFilePath)) {
+        let resultPending = true;
+        let execResult = -1;
+
+        // Run the Unity command line.
+        tool.execAsync().then((value) => {
+            execResult = value;
+            resultPending = false;
+        }).catch((error) => {
+            console.error(error);
+            resultPending = false;
+        });
+
+        try {
+            // Wait for the log file to be created.
+            let waitedLoops = 0;
+            const maxLoops = 5;
+            while (!fs.existsSync(logFilePath) && waitedLoops < maxLoops) {
+                await Utilities.sleep(1000);
+                waitedLoops++;
+            }
+
+            // If for some reason the log file was not created, then we skip
+            // streaming the log to console but still let the Unity process run.
+            if (waitedLoops < maxLoops) {
+                // Now we can start streaming it.
+                UnityLogStreamer.startStreaming(logFilePath);
+            }
+        } catch (e) {
+            if (e instanceof Error) {
+                console.error(e.message);
+            } else {
+                console.error(e);
+            }
+        }
+
+        while (resultPending) {
             await Utilities.sleep(1000);
         }
 
-        UnityLogStreamer.printOpen();
-        const result = await UnityLogStreamer.stream(logFilePath, execResult);
-        UnityLogStreamer.printClose();
+        // Clean up and finish.
+        UnityLogStreamer.stopStreaming();
 
-        return result;
+        return execResult;
     }
 }
