@@ -41,7 +41,7 @@ export class UnityPathTools {
                     break;
                 case OS.MacOS: 
                     unityHubExecutablePath = path.join('/', 'Applications', 'Unity Hub.app', 'Contents', 'MacOS', 'Unity Hub');
-                break;
+                    break;
                 case OS.Linux: 
                     unityHubExecutablePath = path.join('~', 'Applications', 'Unity Hub.AppImage');
                     break;
