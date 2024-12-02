@@ -4,6 +4,7 @@
 import { Utilities } from './utilities';
 import { OS, UnityVersionInfo } from './models';
 import path = require('path');
+import tl = require('azure-pipelines-task-lib/task');
 
 export class UnityPathTools {
 
@@ -24,19 +25,56 @@ export class UnityPathTools {
 
     /**
      * Gets the path to the Unity editors folder depending on the process platform.
-     * @param mode Path lookup mode: unityHub, environmentVariable or customUnityEditorsPath.
+     * @param mode Path lookup mode: default or specify.
      * @param customPath Contains the custom path specified by the user, if custom path mode selected.
      */
     public static getUnityEditorsPath(mode: string, customPath: string | null | undefined = null): string {
         if (mode === 'default') {
             const os = Utilities.getOS();
 
+            // https://docs.unity3d.com/hub/manual/HubCLI.html
+            let unityHubExecutablePath: string;
+
             switch (os) {
-                case OS.Windows: return path.join('C:', 'Program Files', 'Unity', 'Hub', 'Editor');
-                case OS.MacOS: return path.join('/', 'Applications', 'Unity', 'Hub', 'Editor');
-                case OS.Linux: return path.join('~', 'Unity', 'Hub', 'Editor');
+                case OS.Windows: 
+                    unityHubExecutablePath = path.join('C:', 'Program Files', 'Unity Hub', 'Unity Hub.exe');
+                    break;
+                case OS.MacOS: 
+                    unityHubExecutablePath = path.join('/', 'Applications', 'Unity Hub.app', 'Contents', 'MacOS', 'Unity Hub');
+                break;
+                case OS.Linux: 
+                    unityHubExecutablePath = path.join('~', 'Applications', 'Unity Hub.AppImage');
+                    break;
                 default: throw new Error('Operating system not supported!');
             }
+
+            const unityHubCmd = tl.tool(unityHubExecutablePath);
+
+            switch (os) {
+                case OS.Windows: 
+                case OS.MacOS: 
+                    unityHubCmd
+                        .arg('--')
+                        .arg('--headless')
+                        .arg('install-path')
+                        .arg('--get');
+                    break;
+                case OS.Linux: 
+                    unityHubCmd
+                        .arg('--headless')
+                        .arg('install-path')
+                        .arg('--get');
+                    break;
+                default: throw new Error('Operating system not supported!');
+            }
+
+            const result = unityHubCmd.execSync();
+
+            if (result.code != 0) {
+                throw new Error('Error running Unity Hub cli: ' + result.error);
+            }
+
+            return result.stdout;
         } else if (mode === 'specify') {
             if (!customPath) {
                 throw Error(`${customPath} is not a valid Unity editors folder path.`);
