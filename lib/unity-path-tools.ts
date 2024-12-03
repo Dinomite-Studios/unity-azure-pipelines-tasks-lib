@@ -37,6 +37,13 @@ export class UnityPathTools {
                 case OS.Linux: return path.join('~', 'Unity', 'Hub', 'Editor');
                 default: throw new Error('Operating system not supported!');
             }
+        } else if (mode === 'environmentVariable') {
+            const environmentVariablePath = process.env.UNITYHUB_EDITORS_FOLDER_LOCATION as string;
+            if (!environmentVariablePath) {
+                throw Error('Environment variable UNITYHUB_EDITORS_FOLDER_LOCATION does not exist on agent.');
+            }
+
+            return environmentVariablePath;
         } else if (mode === 'specify') {
             if (!customPath) {
                 throw Error(`${customPath} is not a valid Unity editors folder path.`);
