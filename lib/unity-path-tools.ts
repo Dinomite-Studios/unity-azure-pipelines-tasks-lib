@@ -75,6 +75,13 @@ export class UnityPathTools {
             }
 
             return result.stdout;
+        } else if (mode === 'environmentVariable') {
+            const environmentVariablePath = process.env.UNITYHUB_EDITORS_FOLDER_LOCATION as string;
+            if (!environmentVariablePath) {
+                throw Error('Environment variable UNITYHUB_EDITORS_FOLDER_LOCATION does not exist on agent.');
+            }
+
+            return environmentVariablePath;
         } else if (mode === 'specify') {
             if (!customPath) {
                 throw Error(`${customPath} is not a valid Unity editors folder path.`);
