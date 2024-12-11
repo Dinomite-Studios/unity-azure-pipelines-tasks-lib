@@ -21,8 +21,9 @@ export class UnitySceneTools {
         try {
             const sceneFilePath = path.join(projectPath, scenePath);
             const sceneMetaFilePath = path.join(projectPath, `${scenePath}.meta`)
-            const sceneGuid = crypto.randomUUID().replace('-', '');
+            const sceneGuid = crypto.randomUUID().replace(/-/g, '');
 
+            tl.mkdirP(path.dirname(sceneFilePath));
             tl.writeFile(sceneFilePath, '');
             tl.writeFile(sceneMetaFilePath, `fileFormatVersion: 2\nguid: ${sceneGuid}`)
 
