@@ -11,4 +11,9 @@ describe('UnitySceneTools',
             const error = UnitySceneTools.createSceneAt(__dirname, 'Assets/DummyDinoScene.unity', false);
             expect(!error);
         });
+
+        it('Add scene to editor build configuration', () => {
+            const error = UnitySceneTools.addSceneToBuildSettings(__dirname, true, 'Assets/DummyDinoScene.unity', 'testguid');
+            expect(!error);
+        });
     });
