@@ -25,7 +25,7 @@ export class UnityPathTools {
 
     /**
      * Gets the path to the Unity editors folder depending on the process platform.
-     * @param mode Path lookup mode: default or specify.
+     * @param mode Path lookup mode: default, environmentVariable or specify.
      * @param customPath Contains the custom path specified by the user, if custom path mode selected.
      */
     public static getUnityEditorsPath(mode: string, customPath: string | null | undefined = null): string {
