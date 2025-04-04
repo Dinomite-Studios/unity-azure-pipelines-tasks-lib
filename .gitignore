@@ -104,3 +104,9 @@ dist
 .tern-port
 
 .taskkey
+
+# Test Files
+test\Packages\manifest.json
+test\ProjectSettings\EditorBuildSettings.asset
+test\ProjectSettings\ProjectSettings.asset
+test\ProjectSettings\ProjectVersion.txt
