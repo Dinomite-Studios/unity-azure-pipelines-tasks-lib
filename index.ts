@@ -5,6 +5,7 @@ export * from './lib/unity-log-streamer';
 export * from './lib/unity-tool-runner';
 export * from './lib/unity-path-tools';
 export * from './lib/unity-version-tools';
+export * from './lib/unity-bundle-version-tools';
 export * from './lib/unity-package-manager-tools';
 export * from './lib/unity-scene-tools';
 export * from './lib/utilities';
