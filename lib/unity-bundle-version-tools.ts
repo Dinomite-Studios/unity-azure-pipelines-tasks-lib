@@ -45,14 +45,18 @@ export class UnityBundleVersionTools {
 
       // Find the buildNumber section
       const buildNumberStartIndex = lines.findIndex((line) =>
-        line.trim().startsWith(this.buildNumberKey)
+        line.trim().startsWith("buildNumber:")
       );
-
       if (buildNumberStartIndex === -1) {
         throw new Error("buildNumber section not found in the file");
       }
 
-      // Extract the build numbers
+      // Analyze the indentation pattern
+      const buildNumberLine = lines[buildNumberStartIndex];
+      const baseIndentation = buildNumberLine.match(/^\s*/)?.[0] || "";
+      const childIndentation = baseIndentation + "    "; // Typically 4 spaces more than parent
+
+      // Extract current build numbers
       const buildNumbers: BuildNumbers = {
         Standalone: 0,
         VisionOS: 0,
@@ -60,69 +64,73 @@ export class UnityBundleVersionTools {
         tvOS: 0,
       };
 
-      // Parse each build number line
+      // Parse each build number line while tracking the exact indentation used
+      const originalLines: { key: string; line: string }[] = [];
       for (let i = buildNumberStartIndex + 1; i < lines.length; i++) {
         const line = lines[i].trim();
 
         // Stop when we reach a line that's not indented (end of buildNumber section)
-        if (line === "" || !line.startsWith(" ")) {
+        if (line === "" || !lines[i].startsWith(childIndentation)) {
           break;
         }
 
-        // Parse each build number entry
-        if (line.includes(this.buildNumberStandaloneKey)) {
+        // Store the original line exactly as it was (for indentation preservation)
+        originalLines.push({ line: lines[i], key: line.split(":")[0].trim() });
+
+        // Parse values
+        if (line.includes("Standalone:")) {
           buildNumbers.Standalone = parseInt(line.split(":")[1].trim(), 10);
-        } else if (line.includes(this.buildNumberVisionOSKey)) {
+        } else if (line.includes("VisionOS:")) {
           buildNumbers.VisionOS = parseInt(line.split(":")[1].trim(), 10);
-        } else if (line.includes(this.buildNumberiPhoneKey)) {
+        } else if (line.includes("iPhone:")) {
           buildNumbers.iPhone = parseInt(line.split(":")[1].trim(), 10);
-        } else if (line.includes(this.buildNumberTVOSKey)) {
+        } else if (line.includes("tvOS:")) {
           buildNumbers.tvOS = parseInt(line.split(":")[1].trim(), 10);
         }
       }
 
-      // Apply the increments
-      if (increments.Standalone !== undefined) {
+      // Apply increments
+      if (increments.Standalone !== undefined)
         buildNumbers.Standalone += increments.Standalone;
-      }
-      if (increments.VisionOS !== undefined) {
+      if (increments.VisionOS !== undefined)
         buildNumbers.VisionOS += increments.VisionOS;
-      }
-      if (increments.iPhone !== undefined) {
+      if (increments.iPhone !== undefined)
         buildNumbers.iPhone += increments.iPhone;
-      }
-      if (increments.tvOS !== undefined) {
-        buildNumbers.tvOS += increments.tvOS;
+      if (increments.tvOS !== undefined) buildNumbers.tvOS += increments.tvOS;
+
+      // Reconstruct the buildNumber section using original indentation
+      const newLines = [buildNumberLine];
+
+      // For each original line, replace the value while keeping the exact same formatting
+      for (const original of originalLines) {
+        let newLine = original.line;
+
+        if (original.key === "Standalone") {
+          newLine = original.line.replace(
+            /:.*$/,
+            `: ${buildNumbers.Standalone}`
+          );
+        } else if (original.key === "VisionOS") {
+          newLine = original.line.replace(/:.*$/, `: ${buildNumbers.VisionOS}`);
+        } else if (original.key === "iPhone") {
+          newLine = original.line.replace(/:.*$/, `: ${buildNumbers.iPhone}`);
+        } else if (original.key === "tvOS") {
+          newLine = original.line.replace(/:.*$/, `: ${buildNumbers.tvOS}`);
+        }
+
+        newLines.push(newLine);
       }
 
-      // Reconstruct the buildNumber section
-      const newBuildNumberSection = [
-        this.buildNumberKey,
-        `    ${this.buildNumberStandaloneKey} ${buildNumbers.Standalone}`,
-        `    ${this.buildNumberVisionOSKey} ${buildNumbers.VisionOS}`,
-        `    ${this.buildNumberiPhoneKey} ${buildNumbers.iPhone}`,
-        `    ${this.buildNumberTVOSKey} ${buildNumbers.tvOS}`,
-      ].join("\n");
+      // Find the end of the original buildNumber section
+      let buildNumberEndIndex =
+        buildNumberStartIndex + 1 + originalLines.length;
 
-      // Find the end of the buildNumber section
-      let buildNumberEndIndex = buildNumberStartIndex + 1;
-      while (
-        buildNumberEndIndex < lines.length &&
-        (lines[buildNumberEndIndex].trim() === "" ||
-          lines[buildNumberEndIndex].trim().startsWith(" "))
-      ) {
-        buildNumberEndIndex++;
-      }
-
-      // Replace the old section with the new one
-      const newLines = [
+      // Replace the section while preserving all other content exactly
+      const updatedProjectSettingsFileContent = [
         ...lines.slice(0, buildNumberStartIndex),
-        newBuildNumberSection,
+        ...newLines,
         ...lines.slice(buildNumberEndIndex),
-      ];
-
-      // Join the lines back together
-      const updatedProjectSettingsFileContent = newLines.join("\n");
+      ].join("\n");
 
       // Write the updated content back to the file
       tl.writeFile(projectSettingsFilePath, updatedProjectSettingsFileContent);
