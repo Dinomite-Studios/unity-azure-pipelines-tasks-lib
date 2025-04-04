@@ -40,10 +40,10 @@ export class UnityBundleVersionTools {
         { encoding: "utf8" }
       );
 
-      // Split the file into lines
+      // Split the file into lines.
       const lines = projectSettingsFileContent.split("\n");
 
-      // Find the buildNumber section
+      // Find the buildNumber section.
       const buildNumberStartIndex = lines.findIndex((line) =>
         line.trim().startsWith(this.buildNumberKey)
       );
@@ -52,7 +52,7 @@ export class UnityBundleVersionTools {
         throw new Error("buildNumber section not found in the file");
       }
 
-      // Extract the build numbers
+      // Extract the build numbers.
       const buildNumbers: BuildNumbers = {
         Standalone: 0,
         VisionOS: 0,
@@ -60,16 +60,16 @@ export class UnityBundleVersionTools {
         tvOS: 0,
       };
 
-      // Parse each build number line
+      // Parse each build number line.
       for (let i = buildNumberStartIndex + 1; i < lines.length; i++) {
         const line = lines[i].trim();
 
-        // Stop when we reach a line that's not indented (end of buildNumber section)
+        // Stop when we reach a line that's not indented (end of buildNumber section).
         if (line === "") {
           break;
         }
 
-        // Parse each build number entry
+        // Parse each build number entry.
         if (line.includes(this.buildNumberStandaloneKey)) {
           buildNumbers.Standalone = parseInt(line.split(":")[1].trim(), 10);
         } else if (line.includes(this.buildNumberVisionOSKey)) {
@@ -81,21 +81,21 @@ export class UnityBundleVersionTools {
         }
       }
 
-      // Apply the increments
-      if (increments.Standalone !== undefined) {
+      // Apply the increments.
+      if (increments.Standalone) {
         buildNumbers.Standalone += increments.Standalone;
       }
-      if (increments.VisionOS !== undefined) {
+      if (increments.VisionOS) {
         buildNumbers.VisionOS += increments.VisionOS;
       }
-      if (increments.iPhone !== undefined) {
+      if (increments.iPhone) {
         buildNumbers.iPhone += increments.iPhone;
       }
-      if (increments.tvOS !== undefined) {
+      if (increments.tvOS) {
         buildNumbers.tvOS += increments.tvOS;
       }
 
-      // Reconstruct the buildNumber section
+      // Reconstruct the buildNumber section.
       const newBuildNumberSection = [
         `  ${this.buildNumberKey}`,
         `    ${this.buildNumberStandaloneKey} ${buildNumbers.Standalone}`,
@@ -104,7 +104,7 @@ export class UnityBundleVersionTools {
         `    ${this.buildNumberTVOSKey} ${buildNumbers.tvOS}`,
       ].join("\n");
 
-      // Find the end of the buildNumber section
+      // Find the end of the buildNumber section.
       let buildNumberEndIndex = buildNumberStartIndex + 1;
       while (
         buildNumberEndIndex < lines.length &&
@@ -114,14 +114,14 @@ export class UnityBundleVersionTools {
         buildNumberEndIndex++;
       }
 
-      // Replace the old section with the new one
+      // Replace the old section with the new one.
       const newLines = [
         ...lines.slice(0, buildNumberStartIndex),
         newBuildNumberSection,
         ...lines.slice(buildNumberEndIndex),
       ];
 
-      // Write the updated content back to the file
+      // Write the updated content back to the file.
       tl.writeFile(projectSettingsFilePath, newLines.join("\n"), {
         encoding: "utf8",
       });
