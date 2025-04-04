@@ -65,7 +65,7 @@ export class UnityBundleVersionTools {
         const line = lines[i].trim();
 
         // Stop when we reach a line that's not indented (end of buildNumber section)
-        if (line === "" || !line.startsWith(" ")) {
+        if (line === "") {
           break;
         }
 
