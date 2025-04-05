@@ -54,7 +54,7 @@ describe("UnityVersioningTools", () => {
     expect(result.tvOS).to.equal(4);
   });
 
-  it("Increment all by 1", () => {
+  it("Increment all build numbers by 1", () => {
     const result = UnityVersioningTools.incrementBuildNumber(__dirname, {
       Standalone: 1,
       VisionOS: 1,
@@ -65,5 +65,13 @@ describe("UnityVersioningTools", () => {
     expect(result.VisionOS).to.equal(3);
     expect(result.iPhone).to.equal(4);
     expect(result.tvOS).to.equal(5);
+  });
+
+  it("Increment Android bundle version code by 1", () => {
+    const result = UnityVersioningTools.incrementAndroidBundleVersionCode(
+      __dirname,
+      1
+    );
+    expect(result).to.equal(2);
   });
 });
