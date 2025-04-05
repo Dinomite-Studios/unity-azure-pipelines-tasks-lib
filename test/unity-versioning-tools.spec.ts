@@ -74,4 +74,12 @@ describe("UnityVersioningTools", () => {
     );
     expect(result).to.equal(2);
   });
+
+  it("Leave Android bundle version code unchanged", () => {
+    const result = UnityVersioningTools.incrementAndroidBundleVersionCode(
+      __dirname,
+      0
+    );
+    expect(result).to.equal(2);
+  });
 });
