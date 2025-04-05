@@ -52,6 +52,16 @@ export class UnityBundleVersionTools {
         throw new Error("buildNumber section not found in the file");
       }
 
+      // Find the end of the buildNumber section.
+      let buildNumberEndIndex = buildNumberStartIndex + 1;
+      while (
+        buildNumberEndIndex < lines.length &&
+        (lines[buildNumberEndIndex].trim() === "" ||
+          lines[buildNumberEndIndex].trim().startsWith(" "))
+      ) {
+        buildNumberEndIndex++;
+      }
+
       // Extract the build numbers.
       const buildNumbers: BuildNumbers = {
         Standalone: 0,
@@ -61,7 +71,7 @@ export class UnityBundleVersionTools {
       };
 
       // Parse each build number line.
-      for (let i = buildNumberStartIndex + 1; i < lines.length; i++) {
+      for (let i = buildNumberStartIndex + 1; i < buildNumberEndIndex; i++) {
         const line = lines[i].trim();
 
         // Stop when we reach a line that's not indented (end of buildNumber section).
@@ -104,21 +114,11 @@ export class UnityBundleVersionTools {
         `    ${this.buildNumberTVOSKey} ${buildNumbers.tvOS}`,
       ].join("\n");
 
-      // Find the end of the buildNumber section.
-      let buildNumberEndIndex = buildNumberStartIndex + 1;
-      while (
-        buildNumberEndIndex < lines.length &&
-        (lines[buildNumberEndIndex].trim() === "" ||
-          lines[buildNumberEndIndex].trim().startsWith(" "))
-      ) {
-        buildNumberEndIndex++;
-      }
-
       // Replace the old section with the new one.
       const newLines = [
         ...lines.slice(0, buildNumberStartIndex),
         newBuildNumberSection,
-        ...lines.slice(buildNumberEndIndex),
+        ...lines.slice(buildNumberStartIndex + 5),
       ];
 
       // Write the updated content back to the file.
