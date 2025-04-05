@@ -175,8 +175,8 @@ export class UnityVersioningTools {
       const lines = projectSettingsFileContent.split("\n");
 
       // Find the AndroidBundleVersionCode section.
-      const androidBundleVersionCodeIndex = lines.findIndex(
-        (line) => line.trim() === this.androidBundleVersionCodeKey
+      const androidBundleVersionCodeIndex = lines.findIndex((line) =>
+        line.trim().startsWith(this.androidBundleVersionCodeKey)
       );
 
       if (androidBundleVersionCodeIndex === -1) {
@@ -195,7 +195,7 @@ export class UnityVersioningTools {
       androidBundleVersionCode += increment;
 
       // Reconstruct the Android bundle version code line.
-      const newAndroidBundleVersionCodeLine = `${this.androidBundleVersionCodeKey} ${androidBundleVersionCode}`;
+      const newAndroidBundleVersionCodeLine = `  ${this.androidBundleVersionCodeKey} ${androidBundleVersionCode}`;
 
       // Replace the old section with the new one.
       const newLines = [
