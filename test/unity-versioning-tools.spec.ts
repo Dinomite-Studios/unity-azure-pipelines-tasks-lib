@@ -3,13 +3,18 @@
 
 import "mocha";
 import { expect } from "chai";
-import { UnityBundleVersionTools } from "../dist";
+import { UnityVersioningTools } from "../dist";
 
-describe("UnityBundleVersionTools", () => {
+describe("UnityVersioningTools", () => {
   it("Increment standalone build number by 1", () => {
-    const result = UnityBundleVersionTools.incrementBuildNumber(__dirname, {
+    const result = UnityVersioningTools.incrementBuildNumber(__dirname, {
       Standalone: 1,
     });
-    expect(result.Standalone).to.equal(1);
+    expect(result).to.equal({
+      Standalone: 1,
+      VisionOS: 0,
+      iPhone: 0,
+      tvOS: 0,
+    });
   });
 });

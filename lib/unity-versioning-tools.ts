@@ -10,7 +10,7 @@ import tl = require("azure-pipelines-task-lib/task");
 /**
  * A collection of static functions to manipulate the bundle versrion of a Unity project.
  */
-export class UnityBundleVersionTools {
+export class UnityVersioningTools {
   private static readonly unityProjectSettingsFolder = "ProjectSettings";
   private static readonly unityProjectSettingsFile = "ProjectSettings.asset";
 
