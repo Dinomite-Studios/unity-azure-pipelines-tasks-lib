@@ -148,4 +148,78 @@ export class UnityVersioningTools {
       }
     }
   }
+
+  /**
+   * Increments the Android bundle version code for a Unity project.
+   * @param projectPath The path to the Unity project.
+   * @param increment The increment for the bundle version.
+   * @returns The updated bundle version.
+   * @throws Will throw an error if the file cannot be read or written.
+   */
+  public static incrementAndroidBundleVersionCode(
+    projectPath: string,
+    increment: number
+  ): number {
+    try {
+      const projectSettingsFilePath = path.join(
+        projectPath,
+        this.unityProjectSettingsFolder,
+        this.unityProjectSettingsFile
+      );
+      const projectSettingsFileContent = fs.readFileSync(
+        projectSettingsFilePath,
+        { encoding: "utf8" }
+      );
+
+      // Split the file into lines.
+      const lines = projectSettingsFileContent.split("\n");
+
+      // Find the AndroidBundleVersionCode section.
+      const androidBundleVersionCodeIndex = lines.findIndex(
+        (line) => line.trim() === this.androidBundleVersionCodeKey
+      );
+
+      if (androidBundleVersionCodeIndex === -1) {
+        throw new Error(
+          `${this.androidBundleVersionCodeKey} line not found in the file.`
+        );
+      }
+
+      // Extract the Android bundle version code.
+      let androidBundleVersionCode = parseInt(
+        lines[androidBundleVersionCodeIndex].split(":")[1].trim(),
+        10
+      );
+
+      // Apply the increment.
+      androidBundleVersionCode += increment;
+
+      // Reconstruct the Android bundle version code line.
+      const newAndroidBundleVersionCodeLine = `${this.androidBundleVersionCodeKey} ${androidBundleVersionCode}`;
+
+      // Replace the old section with the new one.
+      const newLines = [
+        ...lines.slice(0, androidBundleVersionCodeIndex),
+        newAndroidBundleVersionCodeLine,
+        ...lines.slice(androidBundleVersionCodeIndex + 1),
+      ];
+
+      // Write the updated content back to the file.
+      tl.writeFile(projectSettingsFilePath, newLines.join("\n"), {
+        encoding: "utf8",
+      });
+
+      return androidBundleVersionCode;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          "Error incrementing android bundle version code: " + error.message
+        );
+      } else {
+        throw new Error(
+          "Error incrementing android bundle version code: Unknown error"
+        );
+      }
+    }
+  }
 }
