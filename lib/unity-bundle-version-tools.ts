@@ -44,22 +44,27 @@ export class UnityBundleVersionTools {
       const lines = projectSettingsFileContent.split("\n");
 
       // Find the buildNumber section.
-      const buildNumberStartIndex = lines.findIndex((line) =>
-        line.trim().startsWith(this.buildNumberKey)
+      const buildNumberStartIndex = lines.findIndex(
+        (line) => line.trim() === this.buildNumberKey
       );
 
       if (buildNumberStartIndex === -1) {
-        throw new Error("buildNumber section not found in the file");
+        throw new Error(`${this.buildNumberKey} line not found in the file.`);
       }
 
       // Find the end of the buildNumber section.
       let buildNumberEndIndex = buildNumberStartIndex + 1;
-      while (
-        buildNumberEndIndex < lines.length &&
-        (lines[buildNumberEndIndex].trim() === "" ||
-          lines[buildNumberEndIndex].trim().startsWith(" "))
-      ) {
-        buildNumberEndIndex++;
+      for (let i = buildNumberStartIndex + 1; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (
+          !line.startsWith(this.buildNumberStandaloneKey) &&
+          !line.startsWith(this.buildNumberVisionOSKey) &&
+          !line.startsWith(this.buildNumberiPhoneKey) &&
+          !line.startsWith(this.buildNumberTVOSKey)
+        ) {
+          buildNumberEndIndex = i;
+          break;
+        }
       }
 
       // Extract the build numbers.
@@ -73,11 +78,6 @@ export class UnityBundleVersionTools {
       // Parse each build number line.
       for (let i = buildNumberStartIndex + 1; i < buildNumberEndIndex; i++) {
         const line = lines[i].trim();
-
-        // Stop when we reach a line that's not indented (end of buildNumber section).
-        if (line === "") {
-          break;
-        }
 
         // Parse each build number entry.
         if (line.includes(this.buildNumberStandaloneKey)) {
@@ -118,7 +118,7 @@ export class UnityBundleVersionTools {
       const newLines = [
         ...lines.slice(0, buildNumberStartIndex),
         newBuildNumberSection,
-        ...lines.slice(buildNumberStartIndex + 5),
+        ...lines.slice(buildNumberEndIndex),
       ];
 
       // Write the updated content back to the file.
