@@ -25,6 +25,13 @@ export class UnityVersioningTools {
   static readonly visionOSBundleVersionKey = "visionOSBundleVersion:";
   static readonly androidBundleVersionCodeKey = "AndroidBundleVersionCode:";
 
+  /**
+   * Increments the build number for a Unity project.
+   * @param projectPath The path to the Unity project.
+   * @param increments The increments for each platform.
+   * @returns The updated build numbers.
+   * @throws Will throw an error if the file cannot be read or written.
+   */
   public static incrementBuildNumber(
     projectPath: string,
     increments: Partial<BuildNumbers>
@@ -53,7 +60,7 @@ export class UnityVersioningTools {
       }
 
       // Find the end of the buildNumber section.
-      let buildNumberEndIndex = buildNumberStartIndex + 1;
+      let buildNumberEndIndex = buildNumberStartIndex;
       for (let i = buildNumberStartIndex + 1; i < lines.length; i++) {
         var line = lines[i].trim();
         if (
@@ -65,6 +72,12 @@ export class UnityVersioningTools {
           buildNumberEndIndex = i;
           break;
         }
+      }
+
+      if (buildNumberEndIndex === buildNumberStartIndex) {
+        throw new Error(
+          `${this.buildNumberKey} section end not found in the file.`
+        );
       }
 
       // Extract the build numbers.
