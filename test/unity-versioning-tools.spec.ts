@@ -88,5 +88,32 @@ describe("UnityVersioningTools", () => {
       major: 1,
     });
     expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(0);
+    expect(result.patch).to.equal(0);
+  });
+
+  it("Increment bundle version minor by 2", () => {
+    const result = UnityVersioningTools.incrementBundleVersion(__dirname, {
+      minor: 2,
+    });
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(0);
+  });
+
+  it("Increment bundle version patch by 3", () => {
+    const result = UnityVersioningTools.incrementBundleVersion(__dirname, {
+      patch: 3,
+    });
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(3);
+  });
+
+  it("Leave bundle version unchanged", () => {
+    const result = UnityVersioningTools.incrementBundleVersion(__dirname, {});
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(3);
   });
 });
