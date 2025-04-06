@@ -82,4 +82,11 @@ describe("UnityVersioningTools", () => {
     );
     expect(result).to.equal(2);
   });
+
+  it("Increment bundle version major by 1", () => {
+    const result = UnityVersioningTools.incrementBundleVersion(__dirname, {
+      major: 1,
+    });
+    expect(result.major).to.equal(2);
+  });
 });

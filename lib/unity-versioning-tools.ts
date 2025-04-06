@@ -4,7 +4,7 @@
 import semver from "semver";
 import fs from "fs";
 import path = require("path");
-import { BuildNumbers } from "./models";
+import { BuildNumbers, SemanticVersion } from "./models";
 import tl = require("azure-pipelines-task-lib/task");
 
 /**
@@ -37,27 +37,15 @@ export class UnityVersioningTools {
     increments: Partial<BuildNumbers>
   ): BuildNumbers {
     try {
-      const projectSettingsFilePath = path.join(
-        projectPath,
-        this.unityProjectSettingsFolder,
-        this.unityProjectSettingsFile
-      );
-      const projectSettingsFileContent = fs.readFileSync(
-        projectSettingsFilePath,
-        { encoding: "utf8" }
-      );
-
-      // Split the file into lines.
-      const lines = projectSettingsFileContent.split("\n");
+      // Read file into individual lines.
+      const lines = this.readLines(projectPath);
 
       // Find the buildNumber section.
-      const buildNumberStartIndex = lines.findIndex(
-        (line) => line.trim() === this.buildNumberKey
+      const buildNumberStartIndex = this.findLineIndex(
+        lines,
+        this.buildNumberKey,
+        true
       );
-
-      if (buildNumberStartIndex === -1) {
-        throw new Error(`${this.buildNumberKey} line not found in the file.`);
-      }
 
       // Find the end of the buildNumber section.
       let buildNumberEndIndex = buildNumberStartIndex;
@@ -135,9 +123,7 @@ export class UnityVersioningTools {
       ];
 
       // Write the updated content back to the file.
-      tl.writeFile(projectSettingsFilePath, newLines.join("\n"), {
-        encoding: "utf8",
-      });
+      this.writeLines(projectPath, newLines);
 
       return buildNumbers;
     } catch (error) {
@@ -161,29 +147,14 @@ export class UnityVersioningTools {
     increment: number
   ): number {
     try {
-      const projectSettingsFilePath = path.join(
-        projectPath,
-        this.unityProjectSettingsFolder,
-        this.unityProjectSettingsFile
-      );
-      const projectSettingsFileContent = fs.readFileSync(
-        projectSettingsFilePath,
-        { encoding: "utf8" }
-      );
-
-      // Split the file into lines.
-      const lines = projectSettingsFileContent.split("\n");
+      // Read file into individual lines.
+      const lines = this.readLines(projectPath);
 
       // Find the AndroidBundleVersionCode section.
-      const androidBundleVersionCodeIndex = lines.findIndex((line) =>
-        line.trim().startsWith(this.androidBundleVersionCodeKey)
+      const androidBundleVersionCodeIndex = this.findLineIndex(
+        lines,
+        this.androidBundleVersionCodeKey
       );
-
-      if (androidBundleVersionCodeIndex === -1) {
-        throw new Error(
-          `${this.androidBundleVersionCodeKey} line not found in the file.`
-        );
-      }
 
       // Extract the Android bundle version code.
       let androidBundleVersionCode = parseInt(
@@ -205,9 +176,7 @@ export class UnityVersioningTools {
       ];
 
       // Write the updated content back to the file.
-      tl.writeFile(projectSettingsFilePath, newLines.join("\n"), {
-        encoding: "utf8",
-      });
+      this.writeLines(projectPath, newLines);
 
       return androidBundleVersionCode;
     } catch (error) {
@@ -221,5 +190,124 @@ export class UnityVersioningTools {
         );
       }
     }
+  }
+
+  /**
+   * Increments the bundle version for a Unity project.
+   * @param projectPath The path to the Unity project.
+   * @param increments The increments for the bundle version.
+   * @returns The updated bundle version.
+   * @throws Will throw an error if the file cannot be read or written.
+   */
+  public static incrementBundleVersion(
+    projectPath: string,
+    increments: Partial<SemanticVersion>
+  ): SemanticVersion {
+    try {
+      // Read file into individual lines.
+      const lines = this.readLines(projectPath);
+
+      // Find the bundleVersion section.
+      const bundleVersionIndex = this.findLineIndex(
+        lines,
+        this.bundleVersionKey
+      );
+
+      // Extract the bundle version.
+      let bundleVersion = semver.parse(
+        lines[bundleVersionIndex].split(":")[1].trim()
+      );
+      if (!bundleVersion) {
+        throw new Error(
+          "Invalid bundle version format. Expected format is x.y.z."
+        );
+      }
+
+      // Apply the increment.
+      if (increments.major) {
+        bundleVersion.major += increments.major;
+      }
+      if (increments.minor) {
+        bundleVersion.minor += increments.minor;
+      }
+      if (increments.patch) {
+        bundleVersion.patch += increments.patch;
+      }
+
+      // Reconstruct the Android bundle version code line.
+      const newBundleVersionLine = `  ${this.bundleVersionKey} ${bundleVersion.major}.${bundleVersion.minor}.${bundleVersion.patch}`;
+
+      // Replace the old section with the new one.
+      const newLines = [
+        ...lines.slice(0, bundleVersionIndex),
+        newBundleVersionLine,
+        ...lines.slice(bundleVersionIndex + 1),
+      ];
+
+      // Write the updated content back to the file.
+      this.writeLines(projectPath, newLines);
+
+      return {
+        major: bundleVersion.major,
+        minor: bundleVersion.minor,
+        patch: bundleVersion.patch,
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error("Error incrementing bundle version: " + error.message);
+      } else {
+        throw new Error("Error incrementing bundle version: Unknown error");
+      }
+    }
+  }
+
+  private static readLines(projectPath: string): string[] {
+    const projectSettingsFilePath = path.join(
+      projectPath,
+      this.unityProjectSettingsFolder,
+      this.unityProjectSettingsFile
+    );
+    const projectSettingsFileContent = fs.readFileSync(
+      projectSettingsFilePath,
+      { encoding: "utf8" }
+    );
+
+    return projectSettingsFileContent.split("\n");
+  }
+
+  private static writeLines(projectPath: string, lines: string[]) {
+    const projectSettingsFilePath = path.join(
+      projectPath,
+      this.unityProjectSettingsFolder,
+      this.unityProjectSettingsFile
+    );
+    const projectSettingsFileContent = fs.readFileSync(
+      projectSettingsFilePath,
+      { encoding: "utf8" }
+    );
+
+    tl.writeFile(projectSettingsFilePath, lines.join("\n"), {
+      encoding: "utf8",
+    });
+  }
+
+  private static findLineIndex(
+    lines: string[],
+    key: string,
+    strictEqual: boolean = false
+  ): number {
+    let index = -1;
+
+    if (strictEqual) {
+      index = lines.findIndex((line) => line.trim() === key);
+    } else {
+      index = lines.findIndex((line) => line.trim().startsWith(key));
+    }
+
+    if (index === -1) {
+      throw new Error(`${key} line not found in the file.`);
+    }
+
+    return index;
   }
 }

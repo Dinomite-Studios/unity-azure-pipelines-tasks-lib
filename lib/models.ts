@@ -22,6 +22,15 @@ export interface BuildNumbers {
 }
 
 /**
+ * Structure holds the bundle version of a Unity project.
+ */
+export interface SemanticVersion {
+  major: number;
+  minor: number;
+  patch: number;
+}
+
+/**
  * Information about a Unity engine version.
  */
 export interface UnityVersionInfo {
