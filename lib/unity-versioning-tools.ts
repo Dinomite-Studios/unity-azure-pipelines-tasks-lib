@@ -261,6 +261,152 @@ export class UnityVersioningTools {
     }
   }
 
+  /**
+   * Increments the tvOS bundle version for a Unity project.
+   * @param projectPath The path to the Unity project.
+   * @param increment The increment for the bundle version.
+   * @returns The updated bundle version.
+   * @throws Will throw an error if the file cannot be read or written.
+   */
+  public static incrementTvOSBundleVersion(
+    projectPath: string,
+    increments: Partial<SemanticVersion>
+  ): SemanticVersion {
+    try {
+      // Read file into individual lines.
+      const lines = this.readLines(projectPath);
+
+      // Find the bundleVersion section.
+      const bundleVersionIndex = this.findLineIndex(
+        lines,
+        this.tvOSBundleVersionKey
+      );
+
+      // Extract the bundle version.
+      let bundleVersion = semver.parse(
+        lines[bundleVersionIndex].split(":")[1].trim()
+      );
+      if (!bundleVersion) {
+        throw new Error(
+          "Invalid bundle version format. Expected format is x.y.z."
+        );
+      }
+
+      // Apply the increment.
+      if (increments.major) {
+        bundleVersion.major += increments.major;
+      }
+      if (increments.minor) {
+        bundleVersion.minor += increments.minor;
+      }
+      if (increments.patch) {
+        bundleVersion.patch += increments.patch;
+      }
+
+      // Reconstruct the Android bundle version code line.
+      const newTvOSBundleVersionLine = `  ${this.tvOSBundleVersionKey} ${bundleVersion.major}.${bundleVersion.minor}.${bundleVersion.patch}`;
+
+      // Replace the old section with the new one.
+      const newLines = [
+        ...lines.slice(0, bundleVersionIndex),
+        newTvOSBundleVersionLine,
+        ...lines.slice(bundleVersionIndex + 1),
+      ];
+
+      // Write the updated content back to the file.
+      this.writeLines(projectPath, newLines);
+
+      return {
+        major: bundleVersion.major,
+        minor: bundleVersion.minor,
+        patch: bundleVersion.patch,
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          "Error incrementing tvOS bundle version: " + error.message
+        );
+      } else {
+        throw new Error(
+          "Error incrementing tvOS bundle version: Unknown error"
+        );
+      }
+    }
+  }
+
+  /**
+   * Increments the VisionOS bundle version for a Unity project.
+   * @param projectPath The path to the Unity project.
+   * @param increment The increment for the bundle version.
+   * @returns The updated bundle version.
+   * @throws Will throw an error if the file cannot be read or written.
+   */
+  public static incrementVisionOSBundleVersion(
+    projectPath: string,
+    increments: Partial<SemanticVersion>
+  ): SemanticVersion {
+    try {
+      // Read file into individual lines.
+      const lines = this.readLines(projectPath);
+
+      // Find the bundleVersion section.
+      const bundleVersionIndex = this.findLineIndex(
+        lines,
+        this.visionOSBundleVersionKey
+      );
+
+      // Extract the bundle version.
+      let bundleVersion = semver.parse(
+        lines[bundleVersionIndex].split(":")[1].trim()
+      );
+      if (!bundleVersion) {
+        throw new Error(
+          "Invalid bundle version format. Expected format is x.y.z."
+        );
+      }
+
+      // Apply the increment.
+      if (increments.major) {
+        bundleVersion.major += increments.major;
+      }
+      if (increments.minor) {
+        bundleVersion.minor += increments.minor;
+      }
+      if (increments.patch) {
+        bundleVersion.patch += increments.patch;
+      }
+
+      // Reconstruct the Android bundle version code line.
+      const newVisionOSBundleVersionLine = `  ${this.visionOSBundleVersionKey} ${bundleVersion.major}.${bundleVersion.minor}.${bundleVersion.patch}`;
+
+      // Replace the old section with the new one.
+      const newLines = [
+        ...lines.slice(0, bundleVersionIndex),
+        newVisionOSBundleVersionLine,
+        ...lines.slice(bundleVersionIndex + 1),
+      ];
+
+      // Write the updated content back to the file.
+      this.writeLines(projectPath, newLines);
+
+      return {
+        major: bundleVersion.major,
+        minor: bundleVersion.minor,
+        patch: bundleVersion.patch,
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          "Error incrementing VisionOS bundle version: " + error.message
+        );
+      } else {
+        throw new Error(
+          "Error incrementing VisionOS bundle version: Unknown error"
+        );
+      }
+    }
+  }
+
   private static readLines(projectPath: string): string[] {
     const projectSettingsFilePath = path.join(
       projectPath,

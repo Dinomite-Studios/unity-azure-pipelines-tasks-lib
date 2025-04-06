@@ -116,4 +116,87 @@ describe("UnityVersioningTools", () => {
     expect(result.minor).to.equal(2);
     expect(result.patch).to.equal(3);
   });
+
+  it("Increment tvOS bundle version major by 1", () => {
+    const result = UnityVersioningTools.incrementTvOSBundleVersion(__dirname, {
+      major: 1,
+    });
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(0);
+    expect(result.patch).to.equal(0);
+  });
+
+  it("Increment tvOS bundle version minor by 2", () => {
+    const result = UnityVersioningTools.incrementTvOSBundleVersion(__dirname, {
+      minor: 2,
+    });
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(0);
+  });
+
+  it("Increment tvOS bundle version patch by 3", () => {
+    const result = UnityVersioningTools.incrementTvOSBundleVersion(__dirname, {
+      patch: 3,
+    });
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(3);
+  });
+
+  it("Leave tvOS bundle version unchanged", () => {
+    const result = UnityVersioningTools.incrementTvOSBundleVersion(
+      __dirname,
+      {}
+    );
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(3);
+  });
+
+  it("Increment VisionOS bundle version major by 1", () => {
+    const result = UnityVersioningTools.incrementVisionOSBundleVersion(
+      __dirname,
+      {
+        major: 1,
+      }
+    );
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(0);
+    expect(result.patch).to.equal(0);
+  });
+
+  it("Increment VisionOS bundle version minor by 2", () => {
+    const result = UnityVersioningTools.incrementVisionOSBundleVersion(
+      __dirname,
+      {
+        minor: 2,
+      }
+    );
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(0);
+  });
+
+  it("Increment VisionOS bundle version patch by 3", () => {
+    const result = UnityVersioningTools.incrementVisionOSBundleVersion(
+      __dirname,
+      {
+        patch: 3,
+      }
+    );
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(3);
+  });
+
+  it("Leave VisionOS bundle version unchanged", () => {
+    const result = UnityVersioningTools.incrementVisionOSBundleVersion(
+      __dirname,
+      {}
+    );
+    expect(result.major).to.equal(2);
+    expect(result.minor).to.equal(2);
+    expect(result.patch).to.equal(3);
+  });
 });
