@@ -15,12 +15,12 @@ export class UnityVersionTools {
 
     /**
      * Gets a Unity project's Unity editor version by looking up the project version file in the project directory.
-     * @param projectRootPath Relative path to the Unity project's root folder containing the assets folder, starting from the current working directory.
+     * @param projectPath Relative path to the Unity project's root folder containing the assets folder, starting from the current working directory.
      * @returns The project's used Unity editor version in case of success. Error message in case of failure.
      */
-    public static determineProjectVersionFromFile(projectRootPath: string): UnityVersionInfoResult {
+    public static determineProjectVersionFromFile(projectPath: string): UnityVersionInfoResult {
         try {
-            const projectVersionFilePath = path.join(projectRootPath, UnityVersionTools.unityProjectSettingsFolder, UnityVersionTools.unityProjectEditorVersionFile);
+            const projectVersionFilePath = path.join(projectPath, UnityVersionTools.unityProjectSettingsFolder, UnityVersionTools.unityProjectEditorVersionFile);
             const projectVersionFileContent = fs.readFileSync(projectVersionFilePath, { encoding: 'utf8' });
             const projectVersionResult = this.determineProjectVersionFromContent(projectVersionFileContent);
 
