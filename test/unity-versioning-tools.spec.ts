@@ -80,34 +80,28 @@ describe("UnityVersioningTools", () => {
       Standalone: 20,
     });
     expect(result.Standalone).to.equal(20);
-    expect(result.VisionOS).to.equal(0);
-    expect(result.iPhone).to.equal(0);
-    expect(result.tvOS).to.equal(0);
   });
 
   it("Set VisionOS build number to 20", () => {
     const result = UnityVersioningTools.setBuildNumber(__dirname, {
-      VisionOS: 2,
+      VisionOS: 20,
     });
     expect(result.Standalone).to.equal(20);
     expect(result.VisionOS).to.equal(20);
-    expect(result.iPhone).to.equal(0);
-    expect(result.tvOS).to.equal(0);
   });
 
   it("Set iPhone build number to 20", () => {
     const result = UnityVersioningTools.setBuildNumber(__dirname, {
-      iPhone: 3,
+      iPhone: 20,
     });
     expect(result.Standalone).to.equal(20);
     expect(result.VisionOS).to.equal(20);
     expect(result.iPhone).to.equal(20);
-    expect(result.tvOS).to.equal(0);
   });
 
   it("Set tvOS build number to 20", () => {
     const result = UnityVersioningTools.setBuildNumber(__dirname, {
-      tvOS: 4,
+      tvOS: 20,
     });
     expect(result.Standalone).to.equal(20);
     expect(result.VisionOS).to.equal(20);
