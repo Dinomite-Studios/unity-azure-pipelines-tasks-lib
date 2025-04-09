@@ -745,13 +745,13 @@ export class UnityVersioningTools {
 
       // Apply the new value.
       if (value.major) {
-        bundleVersion.major += value.major;
+        bundleVersion.major = value.major;
       }
       if (value.minor) {
-        bundleVersion.minor += value.minor;
+        bundleVersion.minor = value.minor;
       }
       if (value.patch) {
-        bundleVersion.patch += value.patch;
+        bundleVersion.patch = value.patch;
       }
 
       // Reconstruct the Android bundle version code line.
