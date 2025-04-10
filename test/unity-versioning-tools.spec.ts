@@ -11,7 +11,7 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Increment standalone build number by 1", () => {
-    const result = UnityVersioningTools.incrementBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, true, {
       Standalone: 1,
     });
     expect(result.Standalone).to.equal(1);
@@ -21,7 +21,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Increment VisionOS build number by 2", () => {
-    const result = UnityVersioningTools.incrementBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, true, {
       VisionOS: 2,
     });
     expect(result.Standalone).to.equal(1);
@@ -31,7 +31,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Increment iPhone build number by 3", () => {
-    const result = UnityVersioningTools.incrementBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, true, {
       iPhone: 3,
     });
     expect(result.Standalone).to.equal(1);
@@ -41,7 +41,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Increment tvOS build number by 4", () => {
-    const result = UnityVersioningTools.incrementBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, true, {
       tvOS: 4,
     });
     expect(result.Standalone).to.equal(1);
@@ -51,7 +51,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Leave build numbers unchanged", () => {
-    const result = UnityVersioningTools.incrementBuildNumber(__dirname, {});
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, true, {});
     expect(result.Standalone).to.equal(1);
     expect(result.VisionOS).to.equal(2);
     expect(result.iPhone).to.equal(3);
@@ -59,7 +59,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Increment all build numbers by 1", () => {
-    const result = UnityVersioningTools.incrementBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, true, {
       Standalone: 1,
       VisionOS: 1,
       iPhone: 1,
@@ -76,14 +76,14 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Set standalone build number to 20", () => {
-    const result = UnityVersioningTools.setBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, false, {
       Standalone: 20,
     });
     expect(result.Standalone).to.equal(20);
   });
 
   it("Set VisionOS build number to 20", () => {
-    const result = UnityVersioningTools.setBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, false, {
       VisionOS: 20,
     });
     expect(result.Standalone).to.equal(20);
@@ -91,7 +91,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Set iPhone build number to 20", () => {
-    const result = UnityVersioningTools.setBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, false, {
       iPhone: 20,
     });
     expect(result.Standalone).to.equal(20);
@@ -100,7 +100,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Set tvOS build number to 20", () => {
-    const result = UnityVersioningTools.setBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, false, {
       tvOS: 20,
     });
     expect(result.Standalone).to.equal(20);
@@ -110,7 +110,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Leave build numbers unchanged", () => {
-    const result = UnityVersioningTools.setBuildNumber(__dirname, {});
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, false, {});
     expect(result.Standalone).to.equal(20);
     expect(result.VisionOS).to.equal(20);
     expect(result.iPhone).to.equal(20);
@@ -118,7 +118,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Set all build numbers to 1", () => {
-    const result = UnityVersioningTools.setBuildNumber(__dirname, {
+    const result = UnityVersioningTools.updateBuildNumber(__dirname, false, {
       Standalone: 1,
       VisionOS: 1,
       iPhone: 1,
@@ -135,16 +135,18 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Increment Android bundle version code by 1", () => {
-    const result = UnityVersioningTools.incrementAndroidBundleVersionCode(
+    const result = UnityVersioningTools.updateAndroidBundleVersionCode(
       __dirname,
+      true,
       1
     );
     expect(result).to.equal(2);
   });
 
   it("Leave Android bundle version code unchanged", () => {
-    const result = UnityVersioningTools.incrementAndroidBundleVersionCode(
+    const result = UnityVersioningTools.updateAndroidBundleVersionCode(
       __dirname,
+      true,
       0
     );
     expect(result).to.equal(2);
@@ -155,8 +157,9 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Set Android bundle version code to 20", () => {
-    const result = UnityVersioningTools.setAndroidBundleVersionCode(
+    const result = UnityVersioningTools.updateAndroidBundleVersionCode(
       __dirname,
+      false,
       20
     );
     expect(result).to.equal(20);
@@ -167,7 +170,7 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Increment bundle version major by 1", () => {
-    const result = UnityVersioningTools.incrementBundleVersion(__dirname, {
+    const result = UnityVersioningTools.updateBundleVersion(__dirname, true, {
       major: 1,
     });
     expect(result.major).to.equal(2);
@@ -176,7 +179,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Increment bundle version minor by 2", () => {
-    const result = UnityVersioningTools.incrementBundleVersion(__dirname, {
+    const result = UnityVersioningTools.updateBundleVersion(__dirname, true, {
       minor: 2,
     });
     expect(result.major).to.equal(2);
@@ -185,7 +188,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Increment bundle version patch by 3", () => {
-    const result = UnityVersioningTools.incrementBundleVersion(__dirname, {
+    const result = UnityVersioningTools.updateBundleVersion(__dirname, true, {
       patch: 3,
     });
     expect(result.major).to.equal(2);
@@ -194,7 +197,11 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Leave bundle version unchanged", () => {
-    const result = UnityVersioningTools.incrementBundleVersion(__dirname, {});
+    const result = UnityVersioningTools.updateBundleVersion(
+      __dirname,
+      true,
+      {}
+    );
     expect(result.major).to.equal(2);
     expect(result.minor).to.equal(2);
     expect(result.patch).to.equal(3);
@@ -205,14 +212,14 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Set bundle version major to 1", () => {
-    const result = UnityVersioningTools.setBundleVersion(__dirname, {
+    const result = UnityVersioningTools.updateBundleVersion(__dirname, false, {
       major: 1,
     });
     expect(result.major).to.equal(1);
   });
 
   it("Set bundle version minor to 1", () => {
-    const result = UnityVersioningTools.setBundleVersion(__dirname, {
+    const result = UnityVersioningTools.updateBundleVersion(__dirname, false, {
       minor: 1,
     });
     expect(result.major).to.equal(1);
@@ -220,7 +227,7 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Set bundle version patch to 1", () => {
-    const result = UnityVersioningTools.setBundleVersion(__dirname, {
+    const result = UnityVersioningTools.updateBundleVersion(__dirname, false, {
       patch: 1,
     });
     expect(result.major).to.equal(1);
@@ -229,7 +236,11 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Leave bundle version unchanged", () => {
-    const result = UnityVersioningTools.setBundleVersion(__dirname, {});
+    const result = UnityVersioningTools.updateBundleVersion(
+      __dirname,
+      false,
+      {}
+    );
     expect(result.major).to.equal(1);
     expect(result.minor).to.equal(1);
     expect(result.patch).to.equal(1);
@@ -240,35 +251,48 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Increment tvOS bundle version major by 1", () => {
-    const result = UnityVersioningTools.incrementTvOSBundleVersion(__dirname, {
-      major: 1,
-    });
+    const result = UnityVersioningTools.updateTvOSBundleVersion(
+      __dirname,
+      true,
+      {
+        major: 1,
+      }
+    );
     expect(result.major).to.equal(2);
     expect(result.minor).to.equal(0);
     expect(result.patch).to.equal(0);
   });
 
   it("Increment tvOS bundle version minor by 2", () => {
-    const result = UnityVersioningTools.incrementTvOSBundleVersion(__dirname, {
-      minor: 2,
-    });
+    const result = UnityVersioningTools.updateTvOSBundleVersion(
+      __dirname,
+      true,
+      {
+        minor: 2,
+      }
+    );
     expect(result.major).to.equal(2);
     expect(result.minor).to.equal(2);
     expect(result.patch).to.equal(0);
   });
 
   it("Increment tvOS bundle version patch by 3", () => {
-    const result = UnityVersioningTools.incrementTvOSBundleVersion(__dirname, {
-      patch: 3,
-    });
+    const result = UnityVersioningTools.updateTvOSBundleVersion(
+      __dirname,
+      true,
+      {
+        patch: 3,
+      }
+    );
     expect(result.major).to.equal(2);
     expect(result.minor).to.equal(2);
     expect(result.patch).to.equal(3);
   });
 
   it("Leave tvOS bundle version unchanged", () => {
-    const result = UnityVersioningTools.incrementTvOSBundleVersion(
+    const result = UnityVersioningTools.updateTvOSBundleVersion(
       __dirname,
+      true,
       {}
     );
     expect(result.major).to.equal(2);
@@ -281,31 +305,47 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Set tvOS bundle version major to 1", () => {
-    const result = UnityVersioningTools.setTvOSBundleVersion(__dirname, {
-      major: 1,
-    });
+    const result = UnityVersioningTools.updateTvOSBundleVersion(
+      __dirname,
+      false,
+      {
+        major: 1,
+      }
+    );
     expect(result.major).to.equal(1);
   });
 
   it("Set tvOS bundle version minor to 1", () => {
-    const result = UnityVersioningTools.setTvOSBundleVersion(__dirname, {
-      minor: 1,
-    });
+    const result = UnityVersioningTools.updateTvOSBundleVersion(
+      __dirname,
+      false,
+      {
+        minor: 1,
+      }
+    );
     expect(result.major).to.equal(1);
     expect(result.minor).to.equal(1);
   });
 
   it("Set tvOS bundle version patch to 1", () => {
-    const result = UnityVersioningTools.setTvOSBundleVersion(__dirname, {
-      patch: 1,
-    });
+    const result = UnityVersioningTools.updateTvOSBundleVersion(
+      __dirname,
+      false,
+      {
+        patch: 1,
+      }
+    );
     expect(result.major).to.equal(1);
     expect(result.minor).to.equal(1);
     expect(result.patch).to.equal(1);
   });
 
   it("Leave tvOS bundle version unchanged", () => {
-    const result = UnityVersioningTools.setTvOSBundleVersion(__dirname, {});
+    const result = UnityVersioningTools.updateTvOSBundleVersion(
+      __dirname,
+      false,
+      {}
+    );
     expect(result.major).to.equal(1);
     expect(result.minor).to.equal(1);
     expect(result.patch).to.equal(1);
@@ -316,8 +356,9 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Increment VisionOS bundle version major by 1", () => {
-    const result = UnityVersioningTools.incrementVisionOSBundleVersion(
+    const result = UnityVersioningTools.updateVisionOSBundleVersion(
       __dirname,
+      true,
       {
         major: 1,
       }
@@ -328,8 +369,9 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Increment VisionOS bundle version minor by 2", () => {
-    const result = UnityVersioningTools.incrementVisionOSBundleVersion(
+    const result = UnityVersioningTools.updateVisionOSBundleVersion(
       __dirname,
+      true,
       {
         minor: 2,
       }
@@ -340,8 +382,9 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Increment VisionOS bundle version patch by 3", () => {
-    const result = UnityVersioningTools.incrementVisionOSBundleVersion(
+    const result = UnityVersioningTools.updateVisionOSBundleVersion(
       __dirname,
+      true,
       {
         patch: 3,
       }
@@ -352,8 +395,9 @@ describe("UnityVersioningTools", () => {
   });
 
   it("Leave VisionOS bundle version unchanged", () => {
-    const result = UnityVersioningTools.incrementVisionOSBundleVersion(
+    const result = UnityVersioningTools.updateVisionOSBundleVersion(
       __dirname,
+      true,
       {}
     );
     expect(result.major).to.equal(2);
@@ -366,31 +410,47 @@ describe("UnityVersioningTools", () => {
   ####################################################################################*/
 
   it("Set VisionOS bundle version major to 1", () => {
-    const result = UnityVersioningTools.setVisionOSBundleVersion(__dirname, {
-      major: 1,
-    });
+    const result = UnityVersioningTools.updateVisionOSBundleVersion(
+      __dirname,
+      false,
+      {
+        major: 1,
+      }
+    );
     expect(result.major).to.equal(1);
   });
 
   it("Set VisionOS bundle version minor to 1", () => {
-    const result = UnityVersioningTools.setVisionOSBundleVersion(__dirname, {
-      minor: 1,
-    });
+    const result = UnityVersioningTools.updateVisionOSBundleVersion(
+      __dirname,
+      false,
+      {
+        minor: 1,
+      }
+    );
     expect(result.major).to.equal(1);
     expect(result.minor).to.equal(1);
   });
 
   it("Set VisionOS bundle version patch to 1", () => {
-    const result = UnityVersioningTools.setVisionOSBundleVersion(__dirname, {
-      patch: 1,
-    });
+    const result = UnityVersioningTools.updateVisionOSBundleVersion(
+      __dirname,
+      false,
+      {
+        patch: 1,
+      }
+    );
     expect(result.major).to.equal(1);
     expect(result.minor).to.equal(1);
     expect(result.patch).to.equal(1);
   });
 
   it("Leave VisionOS bundle version unchanged", () => {
-    const result = UnityVersioningTools.setVisionOSBundleVersion(__dirname, {});
+    const result = UnityVersioningTools.updateVisionOSBundleVersion(
+      __dirname,
+      false,
+      {}
+    );
     expect(result.major).to.equal(1);
     expect(result.minor).to.equal(1);
     expect(result.patch).to.equal(1);
