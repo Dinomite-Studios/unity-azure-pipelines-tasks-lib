@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3]
+
+### Changed
+
+- Merged increment and set functions to reduce code redundancy. Incrementing or setting is controlled via function parameter
+
 ## [1.1.2]
 
 ### Added
